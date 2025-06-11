@@ -41,4 +41,9 @@ public class User {
         this.nickname = nickname;
         this.roles.add(UserRole.ROLE_USER);
     }
+
+    public void grantAdminRole() {
+        this.roles.clear();
+        this.roles.add(UserRole.ROLE_ADMIN);
+    }
 }
