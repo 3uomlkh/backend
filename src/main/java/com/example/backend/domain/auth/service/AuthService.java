@@ -7,6 +7,8 @@ import com.example.backend.domain.auth.dto.response.SignupResponse;
 import com.example.backend.domain.user.entity.User;
 import com.example.backend.domain.user.repository.UserRepository;
 import com.example.backend.domain.user.service.UserService;
+import com.example.backend.global.exception.CustomException;
+import com.example.backend.global.exception.ErrorCode;
 import com.example.backend.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +27,7 @@ public class AuthService {
     @Transactional
     public SignupResponse signup(SignupRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new IllegalStateException("이미 존재하는 이름입니다.");
+            throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
         }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
@@ -43,7 +45,7 @@ public class AuthService {
         User user = userService.getUserByUsername(request.getUsername());
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
 
         String token = jwtUtil.createToken(user.getId(), user.getUsername(), user.getRoles(), user.getNickname());
