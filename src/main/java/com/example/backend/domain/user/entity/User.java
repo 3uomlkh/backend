@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Entity
 @Table(name = "users")
@@ -16,25 +19,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    @Column(name = "role")
+    private Set<UserRole> roles = new HashSet<>();
 
     @Builder
-    public User(String username, String nickname, String password, UserRole userRole) {
+    public User(String username, String password, String nickname) {
         this.username = username;
-        this.nickname = nickname;
         this.password = password;
-        this.userRole = userRole;
+        this.nickname = nickname;
+        this.roles.add(UserRole.ROLE_USER);
     }
-
 }
