@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Set;
 
 @Slf4j(topic = "JwtUtil")
 @Component
@@ -33,14 +34,14 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(Long userId, String username, UserRole userRole, String nickname) {
+    public String createToken(Long userId, String username, Set<UserRole> userRole, String nickname) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(String.valueOf(userId))
                         .claim("username", username)
-                        .claim("userRole", userRole.name())
+                        .claim("userRole", userRole.iterator().next())
                         .claim("nickname", nickname)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
