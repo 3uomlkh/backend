@@ -1,10 +1,9 @@
-package com.example.backend.domain.auth;
+package com.example.backend.domain.auth.service;
 
 import com.example.backend.domain.auth.dto.request.SigninRequest;
 import com.example.backend.domain.auth.dto.request.SignupRequest;
 import com.example.backend.domain.auth.dto.response.SigninResponse;
 import com.example.backend.domain.auth.dto.response.SignupResponse;
-import com.example.backend.domain.auth.service.AuthService;
 import com.example.backend.domain.user.entity.User;
 import com.example.backend.domain.user.enums.UserRole;
 import com.example.backend.domain.user.repository.UserRepository;
